@@ -1,6 +1,6 @@
 /// Use this file with videos (images.cpp is for images) ///
 
-#include "detection.h"
+#include "lane-detection.h"
 
 int main(int argc, char* argv[])
 {   
@@ -32,8 +32,11 @@ int main(int argc, char* argv[])
             break;
         }
 
+        // Determine if video is taken during day time or not
+        bool isDay = isDayTime(frame);
+
         // Filter image 
-        Mat filteredIMG = filterColors(frame);
+        Mat filteredIMG = filterColors(frame, isDay);
 
         // Apply grayscale
         Mat gray = applyGrayscale(filteredIMG);
@@ -45,11 +48,11 @@ int main(int argc, char* argv[])
         Mat edges = applyCanny(gBlur);
 
         // Create mask (Region of Interest)
-        Mat polyMask = RegionOfInterest(edges);
+        Mat maskedIMG = RegionOfInterest(edges);
 
-        // Draw the lanes
-        std::vector<Vec4i> linesP = houghLines(polyMask);
-        Mat lanes = drawLanes(frame.clone(), linesP);
+        // Detect straight lines and draw the lanes if possible
+        std::vector<Vec4i> linesP = houghLines(maskedIMG, frame.clone(), false);
+        Mat lanes = drawLanes(frame, linesP);
         imshow("Lanes", lanes);
 
         // Press  ESC on keyboard to exit
