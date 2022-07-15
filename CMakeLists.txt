@@ -4,7 +4,6 @@ find_package( OpenCV REQUIRED )
 include_directories((src/include))
 add_executable(Runner
   main.cpp
-  src/regression.cpp
   src/lane-detection.cpp
 )
 target_link_libraries( Runner ${OpenCV_LIBS} )
