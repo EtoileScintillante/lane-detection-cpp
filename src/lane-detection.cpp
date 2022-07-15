@@ -33,22 +33,14 @@ Mat filterColors(Mat source, bool isDayTime)
     if (isDayTime == false)
     {
         // Gray mask
-        std::vector< int > lowerGray = {80, 80, 80}; // 90 90 90
+        std::vector< int > lowerGray = {80, 80, 80};
         std::vector< int > upperGray = {130, 130, 130};
         inRange(source, lowerGray, upperGray, grayMask);
         bitwise_and(source, source, grayImage, grayMask);
     }
 
     // White mask
-    std::vector< int > lowerWhite;
-    if (isDayTime == false)
-    {
-        lowerWhite = {190, 160, 160};
-    }
-    else
-    {
-        lowerWhite = {200, 200, 200};
-    }
+    std::vector< int > lowerWhite = {130, 130, 130};
     std::vector< int > upperWhite = {255, 255, 255};
     inRange(source, lowerWhite, upperWhite, whiteMask);
     bitwise_and(source, source, whiteImage, whiteMask);
@@ -61,8 +53,8 @@ Mat filterColors(Mat source, bool isDayTime)
 
     // Yellow mask
     cvtColor(source, hsv, COLOR_BGR2HSV);
-    std::vector< int > lowerYellow = {10, 50, 110}; 
-    std::vector< int > upperYellow = {110, 110, 180};
+    std::vector< int > lowerYellow = {20, 100, 110}; 
+    std::vector< int > upperYellow = {30, 180, 240};
     inRange(hsv, lowerYellow, upperYellow, yellowMask);
     bitwise_and(source, source, yellowImage, yellowMask);
 
@@ -208,7 +200,7 @@ Mat drawLanes(Mat source, std::vector<Vec4i> lines)
 
     if (rightLinesX.size() > 0)
     {
-        std::vector< double > coefRight = estimateCoefficients(rightLinesX, rightLinesY); // y = b1x + b0
+        std::vector< double > coefRight = estimateCoefficients<int, double>(rightLinesX, rightLinesY); // y = b1x + b0
         rightB1 = coefRight[0];
         rightB0 = coefRight[1];
     }
@@ -234,7 +226,7 @@ Mat drawLanes(Mat source, std::vector<Vec4i> lines)
 
     if (leftLinesX.size() > 0)
     {
-        std::vector< double > coefLeft = estimateCoefficients(leftLinesX, leftLinesY); // y = b1x + b0
+        std::vector< double > coefLeft = estimateCoefficients<int, double>(leftLinesX, leftLinesY); // y = b1x + b0
         leftB1 = coefLeft[0];
         leftB0 = coefLeft[1];
     }
