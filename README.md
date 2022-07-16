@@ -27,7 +27,7 @@ cmake . && make
 3. Use the [Canny Edge Detection algorithm](https://docs.opencv.org/4.x/da/d22/tutorial_py_canny.html) to detect edges. We're interested in the edges of the lanes.
 
    <img src="https://github.com/EtoileScintillante/lane-detection-cpp/blob/master/docs/canny.png" width="450" alt="canny edges"/>
-4. Find the region of interest. For this program that means creating a mask with the use of two trapezoids (one big one and a smaller one that is located inside the big one). We get the following result after applying the mask on the canny image:
+4. Find the region of interest. For this program that means creating a mask with the use of two trapezoids (a big one and a smaller one that goes inside the big one). We get the following result after applying the mask on the canny image:
 
    <img src="https://github.com/EtoileScintillante/lane-detection-cpp/blob/master/docs/maskedCanny.png" width="450" alt="trapezoid mask"/>
 5. Detect lines using the [Hough Line Transform](https://docs.opencv.org/3.4/d9/db0/tutorial_hough_lines.html). HLT is used to detect straight lines. Every detected line is made up of two points (starting and ending point). Here are the detected lines drawn:
