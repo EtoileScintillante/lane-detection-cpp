@@ -1,4 +1,4 @@
-/// Use this file with videos (images.cpp is for images) ///
+/// Use this file with videos ///
 
 #include "lane-detection.h"
 
@@ -19,6 +19,26 @@ int main(int argc, char* argv[])
         std::cout << "Failed to open videofile!" << std::endl;
         return -1;
     }
+    // get one frame from camera to know frame size and type
+    Mat src;
+    cap >> src;
+    // check if we succeeded
+    if (src.empty()) {
+        std::cout << "ERROR! blank frame grabbed\n";
+        return -1;
+    }
+    bool isColor = (src.type() == CV_8UC3);
+    //--- INITIALIZE VIDEOWRITER
+    VideoWriter writer;
+    int codec = VideoWriter::fourcc('M', 'J', 'P', 'G');  // select desired codec (must be available at runtime)
+    double fps = 25.0;                          // framerate of the created video stream
+    std::string filename = "resultDC5.avi";             // name of the output video file
+    writer.open(filename, codec, fps, src.size(), isColor);
+    // check if we succeeded
+    if (!writer.isOpened()) {
+        std::cout << "Could not open the output video file for write\n";
+        return -1;
+    }
     
     // Read and analyze video
     while (true)
@@ -32,7 +52,7 @@ int main(int argc, char* argv[])
             break;
         }
 
-        // Determine if video is taken during day time or not
+        // Determine if video is taken during daytime or not
         bool isDay = isDayTime(frame);
 
         // Filter image 
@@ -54,6 +74,8 @@ int main(int argc, char* argv[])
         std::vector<Vec4i> linesP = houghLines(maskedIMG, frame.clone(), false);
         Mat lanes = drawLanes(frame, linesP);
         imshow("Lanes", lanes);
+
+        writer.write(lanes);
 
         // Press  ESC on keyboard to exit
         if (waitKey(5) == 27) break;
