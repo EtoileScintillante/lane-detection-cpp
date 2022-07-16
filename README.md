@@ -18,7 +18,7 @@ cmake . && make
 * [OpenCV](https://github.com/opencv/opencv)
 
 ## How it works
-1. Filter out pixels that are not yellow or white (or gray of video is taken during the night/evening).
+1. Filter out pixels that are not yellow or white (or gray if video is taken during the night/evening).
    
    <img src="https://github.com/EtoileScintillante/lane-detection-cpp/blob/master/docs/colorFilter.png" width="450" alt="color filter"/>
 2. Convert image to grayscale and apply Gaussian blur. This is an important step since it reduces noise, and the algorithm for detecting edges (Canny Edge Detection) is susceptible to noise.
