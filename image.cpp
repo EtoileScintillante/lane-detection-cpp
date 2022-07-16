@@ -1,4 +1,4 @@
-/// Use this file with images (main.cpp is for video) ///
+/// Use this file with images ///
 
 #include "lane-detection.h"
 
@@ -41,9 +41,9 @@ int main(int argc, char* argv[])
     waitKey(0);
     imwrite("canny.png", edges);
 
-    // Apply mask
+    // Apply mask on canny
     Mat maskedIMG = RegionOfInterest(edges);
-    imshow("Region of Interest", maskedIMG);
+    imshow("Region of Interest on canny", maskedIMG);
     waitKey(0);
     imwrite("maskedCanny.png", maskedIMG);
 
