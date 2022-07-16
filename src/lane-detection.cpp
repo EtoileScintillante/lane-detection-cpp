@@ -74,9 +74,10 @@ Mat filterColors(Mat source, bool isDayTime)
 Mat RegionOfInterest(Mat source)
 {
     /* In an ideal situation, the ROI should only contain the road lanes.
+    We want to filter out all the other stuff, including things like arrow road markings.
     We try to achieve that by creating two trapezoid masks: one big trapezoid and a smaller one.
     The smaller one goes inside the bigger one. The pixels in the space between them will be kept and all the other pixels
-    will be masked. If it goes well, the space between the two trapezoid contains only the lanes. */
+    will be masked. If it goes well, the space between the two trapezoids contains only the lanes. */
     
     // Parameters big trapezoid
     float trapezoidBottomWidth = 1.0; // Width of bottom edge of trapezoid, expressed as percentage of image width
@@ -85,7 +86,7 @@ Mat RegionOfInterest(Mat source)
 
     // Parameters small trapezoid
     float smallBottomWidth = 0.45; // This will be added to trapezoidBottomWidth to create a less wide bottom edge
-    float smallTopWidth = 0.3; // We multiply the percentage trapoezoidTopWidth with this to create a less wide top edge
+    float smallTopWidth = 0.3; // We multiply the percentage trapoezoidTopWidth with this parameter to create a less wide top edge
     float smallHeight = 1.0; // Height of the small trapezoid expressed as percentage of height of big trapezoid
 
     // This parameter will make the trapezoids float just above the bottom edge of the image
@@ -112,7 +113,7 @@ Mat RegionOfInterest(Mat source)
 
     /* And here we basically put the mask over the source image,
     meaning we return an all black image, except for the part where the mask image
-    has nonzero pixels: all the white pixels inside trapezoid */
+    has nonzero pixels: all the pixels in the space between the two trapezoids */
     Mat maskedImage;
     bitwise_and(source, mask, maskedImage);
 
@@ -188,7 +189,7 @@ Mat drawLanes(Mat source, std::vector<Vec4i> lines)
     // We start with the right side points
     std::vector< int > rightLinesX;
     std::vector< int > rightLinesY;
-    double rightB1, rightB0;
+    double rightB1, rightB0; // Slope and intercept
 
     for (int i = 0; i < rightLines.size(); i++)
     {
@@ -214,7 +215,7 @@ Mat drawLanes(Mat source, std::vector<Vec4i> lines)
     // Now the points at the left side
     std::vector< int > leftLinesX;
     std::vector< int > leftLinesY;
-    double leftB1, leftB0;
+    double leftB1, leftB0; // Slope and intercept
 
     for (int i = 0; i < leftLines.size(); i++)
     {
@@ -237,18 +238,22 @@ Mat drawLanes(Mat source, std::vector<Vec4i> lines)
         drawLeftLane = false;
     }
 
-    // Now we need to find the two points for the right and left lane
-    int y1 = source.rows;
+    /* Now we need to find the two points for the right and left lane:
+    starting points and ending points */
+
+    int y1 = source.rows; // Y coordinate of starting point of both the left and right lane
+
     /* 0.5 = trapezoidHeight (see RegionOfInterest), we set the y coordinate of the ending point
     below the trapezoid height (0.4) to draw shorter lanes. I think that looks nicer. */
-    int y2 = source.rows * (1 - 0.4); 
+
+    int y2 = source.rows * (1 - 0.4); // Y coordinate of ending point of both the left and right lane
 
     // y = b1x + b0 --> x = (y - b0) / b1
-    int rightX1 = (y1 - rightB0) / rightB1;
-    int rightX2 = (y2 - rightB0) / rightB1;
+    int rightX1 = (y1 - rightB0) / rightB1; // X coordinate of starting point of right lane
+    int rightX2 = (y2 - rightB0) / rightB1; // X coordinate of ending point of right lane
 
-    int leftX1 = (y1 - leftB0) / leftB1;
-    int leftX2 = (y2 - leftB0) / leftB1;
+    int leftX1 = (y1 - leftB0) / leftB1; // X coordinate of starting point of left lane
+    int leftX2 = (y2 - leftB0) / leftB1; // X coordinate of ending point of left lane
 
     /* If the ending point of the right lane is on the left side of the left lane (or vice versa),
     return source image without drawings, because this should not be happening in real life. */
@@ -260,7 +265,7 @@ Mat drawLanes(Mat source, std::vector<Vec4i> lines)
     // Create the mask
     Mat mask = Mat::zeros(source.size(), source.type());
 
-    // Draw lines and fill poly made up from the four points described above if both bools are true
+    // Draw lines and fill poly made up of the four points described above if both bools are true
     Mat dst; // Holds blended image
     if (drawRightLane == true && drawLeftLane == true)
     {
@@ -279,7 +284,7 @@ Mat drawLanes(Mat source, std::vector<Vec4i> lines)
         // Blend the mask and source image together
         addWeighted(source, 0.9, mask, 0.3, 0.0, dst);
 
-        // return blended image
+        // Return blended image
         return dst; 
     }
     
@@ -313,13 +318,14 @@ std::vector<Vec4i> houghLines(Mat canny, Mat source, bool drawHough)
 
 bool isDayTime(Mat source)
 {
-    /* I've noticed that, in general, day time images/videos require different color
-    filters than night time images/videos. For example, in darker light it is better
+    /* I've noticed that, in general, daytime images/videos require different color
+    filters than nighttime images/videos. For example, in darker light it is better
     to add a gray color filter in addition to the white and yellow one */
 
-    Scalar s = mean(source);
+    Scalar s = mean(source); // Mean pixel values 
    
-    // Cut off values are chosen somewhat randomly 
+    /* I chose these cut off values by looking at the mean pixel values of multiple 
+    daytime and nighttime images */
     if (s[0] < 30 || s[1] < 33 && s[2] < 30)
     {
         return false;
