@@ -51,10 +51,6 @@ Mat filterColors(Mat source, bool isDayTime);
  * Only keep the part of the image defined by the
  * polygon formed from four points. The rest of the image is set to black.
  * 
- * Please note that the parameters used for creating the ROI mask are currently
- * optimized for videos captured by a dashcam with a resolution of 1280x960 mounted on the middle of 
- * the windscreen. 
- * 
  * @param source image on which to apply the mask
  * @return Mat image with mask
  */
