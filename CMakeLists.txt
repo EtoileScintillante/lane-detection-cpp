@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.2)
-project(sudoku-ar)
+project(lane-detection)
 find_package( OpenCV REQUIRED )
 include_directories((src/include))
 add_executable(Runner
