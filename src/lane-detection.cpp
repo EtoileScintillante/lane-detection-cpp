@@ -26,30 +26,13 @@ Mat applyCanny(Mat source)
 
 Mat filterColors(Mat source, bool isDayTime)
 {
-    Mat hsv, whiteMask, whiteImage, yellowMask, yellowImage, dst;
-    Mat grayMask, grayImage, grayAndWhite;
-
-    // Only apply gray filter when image is classified as taken during night time
-    if (isDayTime == false)
-    {
-        // Gray mask
-        std::vector< int > lowerGray = {80, 80, 80};
-        std::vector< int > upperGray = {130, 130, 130};
-        inRange(source, lowerGray, upperGray, grayMask);
-        bitwise_and(source, source, grayImage, grayMask);
-    }
+    Mat hsv, whiteMask, whiteImage, yellowMask, yellowImage, whiteYellow;
 
     // White mask
     std::vector< int > lowerWhite = {130, 130, 130};
     std::vector< int > upperWhite = {255, 255, 255};
     inRange(source, lowerWhite, upperWhite, whiteMask);
     bitwise_and(source, source, whiteImage, whiteMask);
-
-    // Blend gray and white together
-    if (isDayTime == false)
-    {
-        addWeighted(grayImage, 1., whiteImage, 1., 0., grayAndWhite);
-    }
 
     // Yellow mask
     cvtColor(source, hsv, COLOR_BGR2HSV);
@@ -58,17 +41,26 @@ Mat filterColors(Mat source, bool isDayTime)
     inRange(hsv, lowerYellow, upperYellow, yellowMask);
     bitwise_and(source, source, yellowImage, yellowMask);
 
-    // Blend yellow and white (and gray if night) together
-    if (isDayTime == false)
-    {
-         addWeighted(grayAndWhite, 1., yellowImage, 1., 0., dst);
-    }
-    else
-    {
-         addWeighted(whiteImage, 1., yellowImage, 1., 0., dst);
-    }
+    // Blend yellow and white together
+    addWeighted(whiteImage, 1., yellowImage, 1., 0., whiteYellow);
 
-    return dst;
+    // Add gray filter if image is not taken during the day
+    if (isDayTime == false)
+    {   
+        // Gray mask
+        Mat grayMask, grayImage, grayAndWhite, dst;
+        std::vector< int > lowerGray = {80, 80, 80};
+        std::vector< int > upperGray = {130, 130, 130};
+        inRange(source, lowerGray, upperGray, grayMask);
+        bitwise_and(source, source, grayImage, grayMask);
+
+        // Blend gray, yellow and white together and return the result
+        addWeighted(grayImage, 1., whiteYellow, 1., 0., dst);
+        return dst;
+    }
+    
+    // Return white and yellow mask if image is taken during the day
+    return whiteYellow;
 }
 
 Mat RegionOfInterest(Mat source)
