@@ -47,9 +47,9 @@ the parameters used for calculating the region of interest most likely have to b
 One other thing important to note is that this program does not work well in situations where the light
 makes it difficult to distinguish the lanes from the surroundings.
 Consider these images:
-
-   <img src="https://github.com/EtoileScintillante/lane-detection-cpp/blob/master/docs/badLight1.png" width="450" alt="lanes drawn"/>
-   <img src="https://github.com/EtoileScintillante/lane-detection-cpp/blob/master/docs/badLight2.png" width="450" alt="lanes drawn"/>
+Example #1             |  Example #2
+:-------------------------:|:-------------------------:
+<img src="https://github.com/EtoileScintillante/lane-detection-cpp/blob/master/docs/badLight1.png" width="250" alt="lanes drawn"/>     |   <img src="https://github.com/EtoileScintillante/lane-detection-cpp/blob/master/docs/badLight2.png" width="250" alt="lanes drawn"/>
 
 The setting sun makes it difficult to see the lanes clearly, the camera is almost completely blinded by it.
 In these types of situations this program won't be able to detect the lanes. 
