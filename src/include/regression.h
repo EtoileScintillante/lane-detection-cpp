@@ -14,13 +14,11 @@
 
 /**
  * @brief Multiplies two vectors and then calculates the sum of the multiplied values.
- * vector a and b must be the same size.
- * This function helps with the calculation of the cross-deviation and deviation about x.
+ * vector A and B must be the same size and their values must be of the same type.
  * 
  * @param A vector<T>
  * @param B vector<T>
- * @see estimateCoefficients
- * @return sum
+ * @return sum of the multiplied values
  */
 template <typename T, typename X>
 X multiplyAndSum(std::vector<T> A, std::vector<T> B)
@@ -38,9 +36,10 @@ X multiplyAndSum(std::vector<T> A, std::vector<T> B)
 
 /**
  * @brief Calculates the coefficients (slope and intercept) of the best fitting line
- * given independent and dependent values.
+ * given independent and dependent values. Vector A and B must be the same size 
+ * and their values must be of the same type.
  * 
- * @param A vector<T> (independent variables)
+ * @param A vector<T> (independent values)
  * @param B vector<T> (dependent values)
  * @return vector<X> where first element is the slope (b1), second element is intercept (b0)
  */

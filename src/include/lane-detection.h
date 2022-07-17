@@ -38,10 +38,12 @@ Mat applyCanny(Mat source);
 
 /**
  * @brief Filter source image so that only the white and yellow pixels remain.
+ * A gray filter will also be added if the source image is classified as taken during the night.
  * One assumption for lane detection here is that lanes are either white or yellow.
  * 
  * @param source source image
  * @param isDayTime true if image is taken during the day, false if at night
+ * @see isDayTime
  * @return Mat filtered image
  */
 Mat filterColors(Mat source, bool isDayTime);
