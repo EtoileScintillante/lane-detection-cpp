@@ -16,9 +16,9 @@
  * @brief Multiplies two vectors and then calculates the sum of the multiplied values.
  * vector A and B must be the same size and their values must be of the same type.
  * 
- * @param A vector<T>
- * @param B vector<T>
- * @return sum of the multiplied values
+ * @param A vector<T>.
+ * @param B vector<T>.
+ * @return X sum of the multiplied values.
  */
 template <typename T, typename X>
 X multiplyAndSum(std::vector<T> A, std::vector<T> B)
@@ -39,9 +39,9 @@ X multiplyAndSum(std::vector<T> A, std::vector<T> B)
  * given independent and dependent values. Vector A and B must be the same size 
  * and their values must be of the same type.
  * 
- * @param A vector<T> (independent values)
- * @param B vector<T> (dependent values)
- * @return vector<X> where first element is the slope (b1), second element is intercept (b0)
+ * @param A vector<T> (independent values).
+ * @param B vector<T> (dependent values).
+ * @return vector<X> where first element is the slope (b1), second element is intercept (b0).
  */
 template <typename T, typename X>
 std::vector< X > estimateCoefficients(std::vector<T> A, std::vector<T> B)
