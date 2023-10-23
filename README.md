@@ -1,6 +1,6 @@
 # lane-detection-cpp
-
-Inspired by [this](https://github.com/georgesung/road_lane_line_detection) python lane detection program.
+[![macOS Build Status](https://github.com/EtoileScintillante/lane-detection-cpp/workflows/Build-macOS/badge.svg)](https://github.com/EtoileScintillante/lane-detection-cpp/actions) [![Windows Build Status](https://github.com/EtoileScintillante/lane-detection-cpp/workflows/Build-Windows/badge.svg)](https://github.com/EtoileScintillante/lane-detection-cpp/actions)  
+Inspired by [this](https://github.com/georgesung/road_lane_line_detection) lane detection program written in Python.
 
 ## Example
 <img src="https://github.com/EtoileScintillante/lane-detection-cpp/blob/master/docs/result.gif" width="450" alt="result video"/>
@@ -9,12 +9,13 @@ Inspired by [this](https://github.com/georgesung/road_lane_line_detection) pytho
    ```
 cmake . && make
 ```
-## Run (for videos)
+## Run
+### For videos
    ```
 ./video path-to-video
 ```
 Example: ```./video videos/dashcam1.mp4```
-## Run (for images)
+### For images
    ```
 ./image path-to-image
 ```
