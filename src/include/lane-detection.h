@@ -8,6 +8,7 @@
 #ifndef __LANE_DETECTION__
 #define __LANE_DETECTION__
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include "regression.h"
 using namespace cv;
