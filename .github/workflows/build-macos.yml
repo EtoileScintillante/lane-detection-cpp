@@ -1,0 +1,37 @@
+name: Build-macOS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Check if Homebrew is installed
+      run: |
+        if ! command -v brew &> /dev/null
+        then
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        fi
+      shell: bash
+
+    - name: Install OpenCV with Homebrew
+      run: brew install opencv
+      shell: bash
+
+    - name: Set up CMake
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+
+    - name: Build project on macOS
+      run: |
+        cd build
+        cmake --build .

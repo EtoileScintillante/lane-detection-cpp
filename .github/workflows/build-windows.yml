@@ -1,0 +1,40 @@
+name: Build-Windows
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Check if Chocolatey is installed
+      shell: powershell
+      run: |
+        if (!(Test-Path 'C:\ProgramData\chocolatey\choco.exe')) {
+          # Install Chocolatey if not installed
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;
+          iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'));
+        }
+      working-directory: C:\
+
+    - name: Install OpenCV
+      run: |
+        choco install opencv
+
+    - name: Set up CMake
+      run: |
+        mkdir build
+        cd build
+        cmake -DOpenCV_DIR=C:\tools\opencv\build ..
+
+    - name: Build project on Windows
+      run: |
+        cd build
+        cmake --build .
