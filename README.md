@@ -9,12 +9,18 @@ Inspired by [this](https://github.com/georgesung/road_lane_line_detection) pytho
    ```
 cmake . && make
 ```
-## Run
+## Run (for videos)
    ```
-./Runner path-to-video
+./video path-to-video
 ```
+Example: ```./video videos/dashcam1.mp4```
+## Run (for images)
+   ```
+./image path-to-image
+```
+Example: ```./image images/road1.png```
 ## Requirements
-* [CMake](https://cmake.org/download/) 3.2 or higher 
+* [CMake](https://cmake.org/download/)
 * [OpenCV](https://github.com/opencv/opencv)
 
 ## How it works
